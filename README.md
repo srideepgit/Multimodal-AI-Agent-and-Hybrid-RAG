@@ -2,26 +2,9 @@
 
 # 🤖 Multimodal AI Agent & Hybrid RAG
 
-### Enterprise-Ready Multimodal AI • Agentic Routing • Hybrid Retrieval • Grounded Responses
-
-<br>
+### Multimodal AI • LangGraph Agents • Hybrid Retrieval • Grounded Responses
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=2600&pause=900&center=true&vCenter=true&width=900&lines=Text+%7C+Image+%7C+Audio+%7C+Video+%7C+Voice;LangGraph+Agentic+Workflow;BM25+%2B+Dense+Vector+Search;Cross-Encoder+Reranking;SQL+%2B+Calculator+Tools;Citations+%2B+Confidence+%2B+Validation" alt="Typing animation" />
-
-<br><br>
-
-<a href="#-quick-start">
-<img src="https://img.shields.io/badge/%F0%9F%9A%80%20Quick%20Start-111827?style=for-the-badge" alt="Quick Start" />
-</a>
-<a href="#-architecture">
-<img src="https://img.shields.io/badge/%F0%9F%8F%97%EF%B8%8F%20Architecture-1F2937?style=for-the-badge" alt="Architecture" />
-</a>
-<a href="#-api">
-<img src="https://img.shields.io/badge/%F0%9F%94%8C%20API-4F46E5?style=for-the-badge" alt="API" />
-</a>
-<a href="#-hybrid-rag">
-<img src="https://img.shields.io/badge/%F0%9F%94%8E%20Hybrid%20RAG-7C3AED?style=for-the-badge" alt="Hybrid RAG" />
-</a>
 
 <br><br>
 
@@ -29,18 +12,20 @@
 <img src="https://img.shields.io/badge/FastAPI-0F766E?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
 <img src="https://img.shields.io/badge/LangGraph-Agentic%20Workflow-111827?style=for-the-badge" alt="LangGraph" />
 <img src="https://img.shields.io/badge/OpenAI-API-412991?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI" />
-
-<br>
-
 <img src="https://img.shields.io/badge/Qdrant-Vector%20Search-DC244C?style=for-the-badge" alt="Qdrant" />
 <img src="https://img.shields.io/badge/BM25-Lexical%20Retrieval-6B7280?style=for-the-badge" alt="BM25" />
 <img src="https://img.shields.io/badge/Cross--Encoder-Reranking-2563EB?style=for-the-badge" alt="Cross Encoder" />
-<img src="https://img.shields.io/badge/SQLAlchemy-2.x-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white" alt="SQLAlchemy" />
-<img src="https://img.shields.io/badge/Pydantic-Validation-E92063?style=for-the-badge&logo=pydantic&logoColor=white" alt="Pydantic" />
 
 <br><br>
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=90&section=header&text=One%20Agent.%20Multiple%20Reasoning%20Paths.&fontSize=28&fontAlignY=55&animation=fadeIn" width="100%" alt="Animated header" />
+<a href="#-quick-start"><img src="https://img.shields.io/badge/🚀%20Quick%20Start-111827?style=for-the-badge" alt="Quick Start" /></a>
+<a href="#-architecture"><img src="https://img.shields.io/badge/🏗️%20Architecture-1F2937?style=for-the-badge" alt="Architecture" /></a>
+<a href="#-api"><img src="https://img.shields.io/badge/🔌%20API-4F46E5?style=for-the-badge" alt="API" /></a>
+<a href="#-hybrid-rag"><img src="https://img.shields.io/badge/🔎%20Hybrid%20RAG-7C3AED?style=for-the-badge" alt="Hybrid RAG" /></a>
+
+<br><br>
+
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&height=90&section=header&text=One%20Agent.%20Multiple%20Reasoning%20Paths.&fontSize=28&fontAlignY=55&animation=fadeIn" width="100%" alt="Animated project banner" />
 
 </div>
 
@@ -48,145 +33,107 @@
 
 ## ✨ Overview
 
-**Multimodal AI Agent & Hybrid RAG** is a modular AI backend that combines **agentic orchestration, multimodal understanding, hybrid retrieval, SQL analytics, safe calculation, citations, confidence scoring, and final-response validation** behind a single FastAPI service.
+**Multimodal AI Agent & Hybrid RAG** is a modular AI application that combines **agentic orchestration, multimodal understanding, hybrid retrieval, SQL reasoning, deterministic calculation, source-aware responses, confidence scoring, and response validation** behind a FastAPI service.
 
-Instead of routing every request directly to a language model, the system first determines **what kind of reasoning the request needs** and then executes the most appropriate path.
+The core idea is:
 
-### What the system can handle
+> **Understand the input → choose the reasoning path → gather evidence → generate → validate.**
 
-| Capability | What it does |
+The project supports text, image, audio, video, and push-to-talk voice interactions while keeping the downstream agent workflow consistent.
+
+---
+
+## 🌟 What It Can Do
+
+| Capability | Description |
 |---|---|
-| 💬 Text | Standard natural-language interaction |
-| 🖼️ Image | Vision analysis + OCR-style text extraction |
+| 💬 Text Chat | Natural-language interaction through the agent |
+| 🖼️ Image | Vision analysis + visible text extraction |
 | 🎙️ Audio | Speech-to-text + text-to-speech |
-| 🎬 Video | Sampled-frame vision analysis + audio transcription |
-| 🗣️ Voice | Push-to-talk WebSocket speech interaction |
-| 📚 Knowledge | Hybrid BM25 + dense retrieval |
-| 🔁 Reranking | Cross-encoder refinement of retrieved candidates |
-| 🗄️ SQL | Read-only database-oriented question answering |
-| 🧮 Calculator | Controlled expression evaluation |
-| 🔖 Citations | Source-aware answer generation |
-| 📈 Confidence | Retrieval-based confidence scoring |
-| ✅ Validation | Final answer validation before returning output |
-
-The multimodal layer converts image, audio, and video inputs into text/context that can enter the **same downstream LangGraph pipeline**, so the agent logic remains modality-agnostic. The API exposes dedicated multimodal endpoints for this workflow. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/api/router.py
-
----
-
-# 🖼️ Application Experience
-
-The repository includes a browser-based frontend with:
-
-- Chat history and new-chat flow
-- File attachment support
-- Image/audio/video uploads
-- API-base configuration
-- Suggestion prompts
-- Voice interaction support through the backend WebSocket API
-
-The frontend is served by FastAPI when the `frontend/` directory is present. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/main.py
-
-> **Add your own screenshots here** if you later want the repository to show the running UI directly. The project already contains the frontend implementation, so the README does not invent demo images that are not in the repository.
-
----
-
-# 🎯 Key Design Goals
-
-### 1. Route before generating
-
-The planner identifies whether a request belongs to:
-
-```text
-Knowledge  →  Retrieval pipeline
-SQL       →  Database tool
-Math      →  Calculator
-```
-
-### 2. Retrieve before answering
-
-Knowledge questions use retrieval rather than relying only on the LLM's parametric memory.
-
-### 3. Keep multimodal logic modular
-
-Images, audio, video, and voice are handled by dedicated adapters rather than embedding modality-specific logic throughout the agent.
-
-### 4. Validate before returning
-
-The response engine assembles context, generates an answer, builds citations, calculates confidence, and validates the result before returning it to the API caller. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/agent/nodes.py
+| 🎬 Video | Sampled-frame analysis + audio transcription |
+| 🗣️ Voice | Push-to-talk WebSocket speech workflow |
+| 🧠 Agentic Routing | Routes requests to the appropriate tool |
+| 🔎 Hybrid RAG | BM25 + dense vector retrieval |
+| 🎯 Reranking | Cross-encoder candidate reranking |
+| 🗄️ SQL | Read-only database question answering |
+| 🧮 Calculator | Controlled mathematical evaluation |
+| 🔖 Citations | Source-aware knowledge responses |
+| 📊 Confidence | Retrieval-based confidence signal |
+| ✅ Validation | Final response validation |
+| 🌐 Frontend | Browser-based chat interface |
 
 ---
 
 # 🏗️ Architecture
 
 ```text
-                                  ┌──────────────────────┐
-                                  │       User           │
-                                  │ Text / Image / Audio │
-                                  │ Video / Voice        │
-                                  └──────────┬───────────┘
-                                             │
-                                             ▼
-                              ┌───────────────────────────┐
-                              │        FastAPI API        │
-                              │                           │
-                              │ /chat                    │
-                              │ /chat/image              │
-                              │ /chat/audio              │
-                              │ /chat/video              │
-                              │ /ws/voice                │
-                              └─────────────┬─────────────┘
-                                            │
-                            ┌───────────────┴───────────────┐
-                            │   Multimodal Normalization   │
-                            │ image → text                 │
-                            │ audio → transcript           │
-                            │ video → frames + transcript  │
-                            │ voice → transcript           │
-                            └───────────────┬───────────────┘
-                                            │
-                                            ▼
-                                  ┌──────────────────┐
-                                  │    LangGraph     │
-                                  │      Agent       │
-                                  └────────┬─────────┘
-                                           │
-                                           ▼
-                                  ┌──────────────────┐
-                                  │     Planner      │
-                                  └───────┬──────────┘
-                                          │
-                       ┌──────────────────┼──────────────────┐
-                       ▼                  ▼                  ▼
-                ┌────────────┐     ┌────────────┐     ┌────────────┐
-                │ Knowledge  │     │    SQL     │     │ Calculator │
-                └─────┬──────┘     └─────┬──────┘     └─────┬──────┘
-                      │                  │                  │
-                      ▼                  ▼                  ▼
-               Hybrid RAG         Read-only DB       Safe Evaluation
-                      │                  │                  │
-                      └──────────────────┼──────────────────┘
+                              ┌──────────────────────┐
+                              │        USER          │
+                              │ Text / Image / Audio │
+                              │ Video / Voice       │
+                              └──────────┬───────────┘
+                                         │
                                          ▼
-                                ┌───────────────────┐
-                                │  Response Engine  │
-                                │ Context + LLM      │
-                                │ Citations          │
-                                │ Confidence         │
-                                │ Validation         │
-                                └─────────┬─────────┘
-                                          │
-                                          ▼
-                                  ┌─────────────────┐
-                                  │ Final Response  │
-                                  └─────────────────┘
+                              ┌──────────────────────┐
+                              │      FASTAPI API     │
+                              │                      │
+                              │ /chat                │
+                              │ /chat/image          │
+                              │ /chat/audio          │
+                              │ /chat/video          │
+                              │ /ws/voice            │
+                              └──────────┬───────────┘
+                                         │
+                                         ▼
+                         ┌──────────────────────────────┐
+                         │    MULTIMODAL PROCESSING     │
+                         │ Image → text                 │
+                         │ Audio → transcript           │
+                         │ Video → frames + transcript  │
+                         │ Voice → transcript           │
+                         └──────────────┬───────────────┘
+                                        │
+                                        ▼
+                              ┌──────────────────┐
+                              │    LANGGRAPH     │
+                              │      AGENT       │
+                              └────────┬─────────┘
+                                       │
+                                       ▼
+                              ┌──────────────────┐
+                              │     PLANNER      │
+                              └────────┬─────────┘
+                                       │
+                   ┌───────────────────┼───────────────────┐
+                   ▼                   ▼                   ▼
+             ┌────────────┐      ┌────────────┐      ┌────────────┐
+             │ KNOWLEDGE  │      │    SQL     │      │ CALCULATOR │
+             └─────┬──────┘      └─────┬──────┘      └─────┬──────┘
+                   │                   │                   │
+                   ▼                   ▼                   ▼
+              Hybrid RAG        Read-only DB        Safe Evaluation
+                   │                   │                   │
+                   └───────────────────┼───────────────────┘
+                                       ▼
+                              ┌───────────────────┐
+                              │  RESPONSE ENGINE  │
+                              │ Context + LLM     │
+                              │ Citations         │
+                              │ Confidence        │
+                              │ Validation        │
+                              └─────────┬─────────┘
+                                        │
+                                        ▼
+                               ┌─────────────────┐
+                               │ FINAL RESPONSE  │
+                               └─────────────────┘
 ```
-
-The LangGraph implementation contains explicit `planner`, `knowledge`, `sql`, `calculator`, `response`, and `validation` nodes, with conditional routing from the planner and a final validation stage. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/agent/graph.py
 
 ---
 
 # 🧠 Agentic Workflow
 
-The core execution path is:
+The LangGraph execution path is intentionally simple and explicit:
 
 ```text
 START
@@ -194,86 +141,92 @@ START
   ▼
 PLANNER
   │
-  ├───────────────┬────────────────┐
-  ▼               ▼                ▼
-KNOWLEDGE         SQL         CALCULATOR
-  │               │                │
-  └───────────────┼────────────────┘
-                  ▼
-              RESPONSE
-                  │
-                  ▼
-              VALIDATION
-                  │
-                  ▼
-                 END
+  ├──────────────► KNOWLEDGE ──────► Hybrid RAG
+  │
+  ├──────────────► SQL ────────────► Database Tool
+  │
+  └──────────────► CALCULATOR ─────► Safe Evaluation
+                                      │
+                                      ▼
+                                  RESPONSE
+                                      │
+                                      ▼
+                                  VALIDATION
+                                      │
+                                      ▼
+                                     END
 ```
 
-The planner currently uses simple routing signals to distinguish calculation requests, database-oriented questions, and general knowledge requests. The design intentionally keeps routing separate from the downstream execution nodes. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/agent/nodes.py
+### Routing
+
+- Calculation-related requests → **Calculator**
+- Database-oriented requests → **SQL**
+- Other knowledge requests → **Knowledge / RAG**
+
+The planner is separated from tool execution, making the workflow easier to extend with additional tools or routing strategies.
 
 ---
 
 # 🔎 Hybrid RAG
 
-The retrieval stack is organized into separate **ingestion, indexing, retrieval, and reranking** layers.
+The retrieval system combines lexical and semantic search before reranking the candidates.
 
 ```text
                  DOCUMENTS / KNOWLEDGE
                            │
                            ▼
-                  ┌──────────────────┐
-                  │    Ingestion     │
-                  │ Load → Clean →   │
-                  │ Metadata → Split │
-                  └────────┬─────────┘
+                    ┌─────────────┐
+                    │  INGESTION  │
+                    │ Load/Clean  │
+                    │ Metadata    │
+                    │ Chunking    │
+                    └──────┬──────┘
                            │
                            ▼
-                  ┌──────────────────┐
-                  │     Indexing     │
-                  │ Embeddings +     │
-                  │ Vector Store     │
-                  └────────┬─────────┘
+                    ┌─────────────┐
+                    │  INDEXING   │
+                    │ Embeddings  │
+                    │ Vector Store│
+                    └──────┬──────┘
                            │
               ┌────────────┴────────────┐
               ▼                         ▼
        ┌──────────────┐          ┌──────────────┐
        │ BM25 Search  │          │ Dense Search │
-       │ Lexical      │          │ Vector       │
+       │   Lexical    │          │   Semantic   │
        └──────┬───────┘          └──────┬───────┘
               │                         │
               └────────────┬────────────┘
                            ▼
-                   ┌───────────────┐
-                   │ Hybrid Fusion │
-                   └───────┬───────┘
+                    ┌─────────────┐
+                    │    HYBRID   │
+                    │   RETRIEVAL │
+                    └──────┬──────┘
                            ▼
-                   ┌───────────────┐
-                   │ Cross-Encoder │
-                   │   Reranker    │
-                   └───────┬───────┘
+                    ┌─────────────┐
+                    │ CROSS-ENCODER│
+                    │   RERANKER  │
+                    └──────┬──────┘
                            ▼
-                     Top Results
+                       TOP RESULTS
                            │
                            ▼
-                    Response Engine
+                    RESPONSE ENGINE
 ```
 
-The repository contains distinct modules for document ingestion/cleaning/splitting, embedding/index construction, BM25 retrieval, dense retrieval, hybrid retrieval, and reranking. citehttps://api.github.com/repos/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/git/trees/da99b6bdeb4fdf58928dbcb29d95481dd2340bb0?recursive=1
+### Retrieval components
 
-### Why hybrid retrieval?
-
-| Retrieval method | Strength |
+| Component | Role |
 |---|---|
-| **BM25** | Exact terms, keywords, identifiers, names |
-| **Dense vectors** | Semantic similarity and paraphrases |
-| **Hybrid fusion** | Combines lexical + semantic recall |
-| **Cross-encoder** | Re-ranks candidates for higher relevance |
+| **BM25** | Exact keyword and lexical matching |
+| **Dense Retrieval** | Semantic similarity using embeddings |
+| **Hybrid Retrieval** | Combines lexical + semantic candidates |
+| **Cross-Encoder** | Refines candidate relevance |
+| **Qdrant** | Vector search / storage layer |
 
 ---
 
 # 📚 Ingestion & Indexing
-
-The project separates ingestion and indexing into explicit modules:
 
 ```text
 ingestion/
@@ -290,187 +243,163 @@ indexing/
 └── vectorstore.py
 ```
 
-This separation makes the pipeline easier to test, replace, and extend as document sources grow. citehttps://api.github.com/repos/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/git/trees/da99b6bdeb4fdf58928dbcb29d95481dd2340bb0?recursive=1
+The separation between ingestion and indexing keeps document processing independent from the agent orchestration layer.
 
 ---
 
-# 🖼️ Multimodal Intelligence
+# 🖼️ Multimodal AI
 
 ## Image Understanding
 
-The image handler converts image bytes into a detailed grounded description and extracts visible text. It explicitly instructs the vision model to avoid inventing information that is not visible. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/multimodal/image_handler.py
-
 ```text
-Image
-  │
-  ▼
+Image Upload
+     │
+     ▼
 Vision Model
-  │
-  ├── Visual description
-  └── Visible text / OCR
-          │
-          ▼
-      Text context
-          │
-          ▼
-      Agent pipeline
+     │
+     ├── Visual description
+     └── Visible text
+             │
+             ▼
+        Text Context
+             │
+             ▼
+        Agent Workflow
 ```
 
----
+The image handler produces grounded textual context so the rest of the agent does not need modality-specific reasoning logic.
 
-## 🎙️ Audio Understanding
-
-The audio handler supports both:
-
-- **Speech-to-text transcription**
-- **Text-to-speech synthesis**
-
-The implementation uses the OpenAI audio APIs and returns normalized text to the rest of the application. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/multimodal/audio_handler.py
-
----
-
-## 🎬 Video Understanding
-
-Video is processed by combining two signals:
+## 🎙️ Audio
 
 ```text
-Video
- ├── Sample frames ──► Vision analysis
- │
- └── Extract audio ──► Speech transcription
-            │
-            ▼
-     Combined text context
-            │
-            ▼
-       Same agent graph
+Audio → Speech-to-Text → Agent → Answer → Text-to-Speech
 ```
 
-The current implementation samples frames at a fixed interval and combines visual descriptions with the extracted transcript. It requires `ffmpeg` to be available on `PATH`. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/multimodal/video_handler.py
+The audio layer supports both transcription and speech synthesis through the configured OpenAI audio models.
 
----
-
-## 🗣️ Voice Interaction
-
-The voice service provides a **push-to-talk, turn-based WebSocket loop**:
+## 🎬 Video
 
 ```text
-Audio Clip
-   │
-   ▼
-Speech-to-Text
-   │
-   ▼
-LangGraph Agent
-   │
-   ▼
-Text Answer + Confidence
-   │
-   ▼
-Text-to-Speech
-   │
-   ▼
-Audio Reply
+                         VIDEO
+                           │
+              ┌────────────┴────────────┐
+              ▼                         ▼
+       Sample Frames               Extract Audio
+              │                         │
+              ▼                         ▼
+       Vision Analysis           Speech-to-Text
+              │                         │
+              └────────────┬────────────┘
+                           ▼
+                  Combined Text Context
+                           │
+                           ▼
+                     Agent Workflow
 ```
 
-The implementation intentionally uses complete utterance clips instead of continuous duplex streaming. The code documents true low-latency streaming as a future enhancement. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/multimodal/voice_realtime.py
+Video processing requires **FFmpeg** and combines sampled visual frames with the extracted audio transcript.
+
+## 🗣️ Voice
+
+The voice interface uses a push-to-talk, turn-based WebSocket workflow:
+
+```text
+Audio Clip → Transcription → LangGraph → Answer → TTS → Audio Reply
+```
 
 ---
 
 # 🗄️ SQL Reasoning
 
-Database-oriented questions are routed through the SQL tool path.
-
-The current agent distinguishes SQL-oriented questions using terms such as:
-
 ```text
-employee
-salary
-department
-count
-database
-```
-
-The SQL node then asks the configured LLM to generate SQL and only proceeds with the generated statement when it passes a basic `SELECT` check. Otherwise, the implementation falls back to a safe default query. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/agent/nodes.py
-
-> **Production hardening note:** before exposing arbitrary natural-language SQL generation in a production environment, add stronger AST-based validation, parameterization, role-based permissions, query timeouts, table/column allow-lists, and resource limits.
-
----
-
-# 🧮 Safe Calculator Path
-
-Mathematical requests are routed separately from knowledge retrieval.
-
-```text
-User Expression
+User Question
       │
       ▼
-Calculator Tool
+   Planner
       │
       ▼
-Validated Result
+     SQL
+      │
+      ▼
+LLM SQL Generation
+      │
+      ▼
+Safety Check
+      │
+      ▼
+Read-Only Execution
+      │
+      ▼
+ SQL Result
       │
       ▼
 Response Engine
 ```
 
-This isolates deterministic arithmetic from free-form language generation.
+The SQL path is designed around read-only execution. Production deployments should additionally use least-privilege database credentials, strict query validation, timeouts, and appropriate database permissions.
 
 ---
 
-# 🔖 Citations, Confidence & Validation
+# 🧮 Calculator
 
-The response stage is more than simple text generation.
-
-It performs:
+Mathematical requests are handled separately from language generation:
 
 ```text
-Retrieved Evidence
-       │
-       ▼
-Context Builder
-       │
-       ▼
-Answer Generator
-       │
-       ├──────────────► Citation Builder
-       │
-       ├──────────────► Confidence Scorer
-       │
-       └──────────────► Validator
-                              │
-                              ▼
-                       Final Response
+Question → Planner → Calculator → Controlled Evaluation → Result
 ```
 
-The implementation builds the response context, generates the answer, creates citations from retrieved chunks, calculates confidence, validates the assembled response, and stores the validated output back into agent state. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/agent/nodes.py
+This provides a deterministic execution path for supported calculations.
+
+---
+
+# 🛡️ Response Quality Pipeline
+
+```text
+Tool / Retrieval Context
+          │
+          ▼
+    Context Builder
+          │
+          ▼
+      Generation
+          │
+          ▼
+      Citations
+          │
+          ▼
+ Confidence Scoring
+          │
+          ▼
+      Validation
+          │
+          ▼
+   Final Response
+```
+
+The response layer separates evidence gathering, generation, citation construction, confidence calculation, and final validation.
 
 ---
 
 # 🔌 API
 
-The FastAPI router exposes the following interfaces:
-
-| Endpoint | Method | Purpose |
+| Method | Endpoint | Purpose |
 |---|---|---|
-| `/health` | `GET` | Health check |
-| `/chat` | `POST` | Standard text chat |
-| `/chat/image` | `POST` | Image + optional question |
-| `/chat/audio` | `POST` | Audio + optional question |
-| `/chat/video` | `POST` | Video + optional question |
-| `/ws/voice` | `WebSocket` | Push-to-talk voice interaction |
+| `GET` | `/health` | Health check |
+| `POST` | `/chat` | Text chat |
+| `POST` | `/chat/image` | Image + question |
+| `POST` | `/chat/audio` | Audio + question |
+| `POST` | `/chat/video` | Video + question |
+| `WS` | `/ws/voice` | Push-to-talk voice |
 
-These routes are implemented in `app/api/router.py`. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/api/router.py
-
-### Example: text request
+### Example
 
 ```bash
 curl -X POST "http://localhost:8000/chat" \
   -H "Content-Type: application/json" \
-  -d '{"question":"What is the capital of France?"}'
+  -d '{"question":"What can you help me with?"}'
 ```
 
-### Example response shape
+Example response shape:
 
 ```json
 {
@@ -480,86 +409,18 @@ curl -X POST "http://localhost:8000/chat" \
 }
 ```
 
-The API service returns answer text together with sources and confidence for the standard agent response. Multimodal endpoints additionally include the modality and extracted text. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/api/router.py
-
----
-
-# 📂 Project Structure
-
-```text
-Multimodal-AI-Agent-and-Hybrid-RAG/
-│
-├── app/
-│   ├── agent/
-│   │   ├── graph.py              # LangGraph topology
-│   │   ├── nodes.py              # Planner, tools, response, validation
-│   │   └── state.py              # Agent state model
-│   │
-│   ├── api/
-│   │   ├── router.py             # REST + WebSocket endpoints
-│   │   ├── schemas.py             # Request/response contracts
-│   │   └── dependencies.py       # Dependency wiring
-│   │
-│   ├── core/
-│   │   └── config.py             # Application configuration
-│   │
-│   ├── llm/
-│   │   ├── base.py
-│   │   ├── factory.py
-│   │   └── openai_client.py
-│   │
-│   ├── multimodal/
-│   │   ├── image_handler.py      # Vision + OCR-style extraction
-│   │   ├── audio_handler.py      # STT + TTS
-│   │   ├── video_handler.py      # Frame + audio processing
-│   │   └── voice_realtime.py     # WebSocket voice loop
-│   │
-│   ├── planner/
-│   │   ├── planner.py
-│   │   └── schema.py
-│   │
-│   ├── prompts/
-│   │   ├── planner.py
-│   │   ├── knowledge.py
-│   │   ├── sql.py
-│   │   ├── response.py
-│   │   └── system.py
-│   │
-│   ├── rag/
-│   │   ├── indexing/
-│   │   ├── ingestion/
-│   │   └── retrieval/
-│   │
-│   ├── services/
-│   │   └── ai_service.py         # Graph invocation facade
-│   │
-│   └── main.py                   # FastAPI application
-│
-├── frontend/
-│   ├── index.html                # Chat UI
-│   ├── style.css
-│   └── script.js
-│
-├── .env.example
-├── requirements.txt
-├── LICENSE
-└── README.md
-```
-
-The repository currently follows this modular organization in the `dbs` branch. citehttps://api.github.com/repos/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/git/trees/dbs?recursive=1
-
 ---
 
 # 🚀 Quick Start
 
-## 1. Clone the repository
+## 1. Clone
 
 ```bash
 git clone https://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG.git
 cd Multimodal-AI-Agent-and-Hybrid-RAG
 ```
 
-## 2. Create a virtual environment
+## 2. Create environment
 
 ### Windows
 
@@ -581,9 +442,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-The repository pins versions for major dependencies including FastAPI, LangChain, LangGraph, OpenAI, Qdrant, rank-bm25, sentence-transformers, SQLAlchemy, and supporting multimodal/document-processing libraries. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/requirements.txt
-
-## 4. Configure environment variables
+## 4. Configure `.env`
 
 Copy the example file:
 
@@ -591,13 +450,17 @@ Copy the example file:
 cp .env.example .env
 ```
 
-Then populate the required API keys, database settings, model configuration, and other values used by the application.
+On PowerShell:
 
-> Keep secrets out of Git. Do not commit real API keys or production database credentials.
+```powershell
+Copy-Item .env.example .env
+```
 
-## 5. Install `ffmpeg`
+Configure your API, model, database, vector-store, retrieval, and upload settings.
 
-Required for the video pipeline.
+> ⚠️ Never commit API keys or secrets to GitHub.
+
+## 5. Install FFmpeg
 
 Verify:
 
@@ -605,264 +468,167 @@ Verify:
 ffmpeg -version
 ```
 
-## 6. Start the FastAPI app
-
-The application uses FastAPI/Uvicorn. A typical development command is:
+## 6. Run
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Then open:
+Open:
 
 ```text
 http://localhost:8000
 ```
 
-The frontend is mounted at `/` when the `frontend/` directory exists. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/main.py
+---
+
+# 🌐 Frontend
+
+The repository includes a lightweight browser UI with:
+
+- Chat history
+- New chat
+- File attachments
+- Image/audio/video uploads
+- API base URL configuration
+- Suggested prompts
+- Voice interaction support
+
+```text
+frontend/
+├── index.html
+├── style.css
+└── script.js
+```
+
+FastAPI serves the frontend from `frontend/` when the directory is available.
 
 ---
 
-# ⚙️ Configuration
-
-The repository includes `.env.example` to document the expected configuration surface.
-
-Typical configuration categories include:
+# 📁 Project Structure
 
 ```text
-OpenAI / LLM settings
-Embedding model settings
-Vector database settings
-Database / SQL settings
-Upload limits
-Application settings
-```
-
-Use the project's configuration module in `app/core/config.py` as the source of truth when adding or changing environment variables.
-
----
-
-# 🧪 Example Use Cases
-
-### 💬 Knowledge question
-
-```text
-Explain our employee benefits policy.
-```
-
-→ Planner → Knowledge → Hybrid RAG → Reranking → Response
-
-### 🗄️ SQL question
-
-```text
-How many employees are in the Engineering department?
-```
-
-→ Planner → SQL → Database → Response
-
-### 🧮 Calculation
-
-```text
-Calculate 18% of 2450.
-```
-
-→ Planner → Calculator → Response
-
-### 🖼️ Image analysis
-
-Upload an image and ask:
-
-```text
-Summarize the information in this chart.
-```
-
-→ Image handler → Extracted context → Same agent graph
-
-### 🎬 Video analysis
-
-Upload a video and ask:
-
-```text
-What are the main points discussed in this video?
-```
-
-→ Frame analysis + transcription → Combined context → Same agent graph
-
-### 🎙️ Voice
-
-Send an utterance through `/ws/voice` and receive:
-
-```text
-Transcript + answer + confidence + synthesized speech
+Multimodal-AI-Agent-and-Hybrid-RAG/
+│
+├── app/
+│   ├── agent/
+│   │   ├── graph.py
+│   │   ├── nodes.py
+│   │   └── state.py
+│   │
+│   ├── api/
+│   │   ├── dependencies.py
+│   │   ├── router.py
+│   │   └── schemas.py
+│   │
+│   ├── core/
+│   │   └── config.py
+│   │
+│   ├── llm/
+│   │   ├── base.py
+│   │   ├── factory.py
+│   │   └── openai_client.py
+│   │
+│   ├── multimodal/
+│   │   ├── image_handler.py
+│   │   ├── audio_handler.py
+│   │   ├── video_handler.py
+│   │   └── voice_realtime.py
+│   │
+│   ├── planner/
+│   ├── prompts/
+│   ├── rag/
+│   ├── services/
+│   └── main.py
+│
+├── frontend/
+├── .env.example
+├── LICENSE
+├── README.md
+└── requirements.txt
 ```
 
 ---
 
-# 🛡️ Reliability & Safety Considerations
+# 🧰 Technology Stack
 
-The architecture already contains several useful controls:
-
-- Structured agent state
-- Separate execution paths for knowledge, SQL, and calculation
-- Upload size enforcement
-- Empty-input validation
-- Final response validation
-- Source and confidence fields
-- Explicit multimodal preprocessing
-- Separation between application layers
-
-The API also returns appropriate error responses for invalid uploads, oversized files, malformed input, and unavailable video processing dependencies. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/api/router.py
-
-### Recommended production hardening
-
-For production use, consider adding:
-
-- Strict CORS origins instead of wildcard access
-- Stronger SQL AST validation and allow-lists
-- Authentication and authorization
-- Rate limiting
-- Request tracing and structured logging
-- Persistent conversation/checkpoint storage
-- Retrieval evaluation datasets
-- Prompt-injection defenses
-- PII redaction
-- Model and retrieval observability
-- Background processing for large files
-
-The current FastAPI configuration allows all CORS origins, so this should be restricted before a public deployment. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/main.py
-
----
-
-# 📦 Technology Stack
-
-| Layer | Technology |
+| Layer | Technologies |
 |---|---|
+| Language | Python 3.12+ |
 | API | FastAPI, Uvicorn |
-| Agent orchestration | LangGraph |
+| Agent | LangGraph, LangChain |
 | LLM | OpenAI API |
-| Retrieval | BM25 + dense vectors + hybrid fusion |
-| Reranking | Cross-encoder / sentence-transformers |
-| Vector database | Qdrant |
-| Database access | SQLAlchemy |
+| Vector Search | Qdrant |
+| Lexical Search | BM25 |
+| Reranking | Cross-Encoder |
+| Database | SQLAlchemy + configured relational DB |
 | Validation | Pydantic |
-| Audio | OpenAI speech APIs |
-| Image | OpenAI vision-capable model |
-| Video | FFmpeg + image/audio handlers |
-| Frontend | HTML / CSS / JavaScript |
-| Document processing | PyMuPDF, pypdf, python-docx, unstructured |
-| NLP / ML utilities | scikit-learn, spaCy, transformers |
-
-These dependencies are reflected in the repository's pinned `requirements.txt`. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/requirements.txt
+| Document Processing | PyMuPDF, pypdf, python-docx, Unstructured |
+| Video | FFmpeg |
+| Frontend | HTML, CSS, JavaScript |
 
 ---
 
-# 📈 Engineering Highlights
+# 🔐 Security & Production Notes
 
-### Modular architecture
+Before production deployment, consider:
 
-Each major responsibility has its own package, reducing coupling and making components easier to replace.
-
-### Multimodal normalization
-
-Different media types are converted into textual context before the core agent executes, allowing a common reasoning path.
-
-### Retrieval specialization
-
-Lexical and semantic retrieval are handled separately before hybrid fusion and reranking.
-
-### Response governance
-
-The system carries source and confidence metadata and validates the generated response before returning it.
-
-### API-first design
-
-The same agent graph can be used through text and multimodal routes without duplicating reasoning logic. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/api/router.pyhttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/services/ai_service.py
+- Restrict CORS origins instead of allowing `*`
+- Use least-privilege database credentials
+- Enforce strict SQL validation and allowlists
+- Add authentication and authorization
+- Add request rate limiting
+- Validate MIME types and file contents
+- Scan uploaded files
+- Add model/tool timeouts
+- Add structured logging and tracing
+- Store secrets in a dedicated secret manager
+- Add retrieval and answer-quality evaluation
 
 ---
 
 # 🗺️ Roadmap
 
-```text
-✅ Multimodal API layer
-✅ LangGraph planner + routing
-✅ Hybrid BM25 + dense retrieval
-✅ Reranking layer
-✅ SQL + calculator paths
-✅ Citations + confidence + validation
-✅ Image / audio / video handling
-✅ Push-to-talk voice
-
-🔲 Streaming multimodal responses
-🔲 Persistent agent memory
-🔲 Advanced SQL AST guardrails
-🔲 Retrieval evaluation suite
-🔲 Observability dashboard
-🔲 Authentication / RBAC
-🔲 Production deployment profile
-```
+- [ ] Continuous realtime audio streaming
+- [ ] Advanced intent classification
+- [ ] Persistent conversation memory
+- [ ] Authentication and RBAC
+- [ ] Background document ingestion
+- [ ] Retrieval evaluation benchmarks
+- [ ] Observability and tracing
+- [ ] Containerized deployment
+- [ ] Production database hardening
+- [ ] CI/CD automation
 
 ---
 
-# 👨‍💻 Developer Notes
+# 🤝 Contributing
 
-The codebase intentionally keeps the main orchestration surface compact:
-
-```text
-API
- ↓
-AIService
- ↓
-Compiled LangGraph
- ↓
-Planner / Tool Nodes
- ↓
-Response + Validation
+```bash
+git checkout -b feature/your-feature
+git add .
+git commit -m "feat: describe your change"
+git push origin feature/your-feature
 ```
 
-`AIService.chat()` invokes the compiled graph and returns the normalized `answer`, `sources`, and `confidence` fields expected by the API layer. citehttps://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG/blob/dbs/app/services/ai_service.py
-
----
-
-# 📚 Useful Repository References
-
-- [Agent Graph](./app/agent/graph.py)
-- [Agent Nodes](./app/agent/nodes.py)
-- [Agent State](./app/agent/state.py)
-- [API Router](./app/api/router.py)
-- [AI Service](./app/services/ai_service.py)
-- [Image Handler](./app/multimodal/image_handler.py)
-- [Audio Handler](./app/multimodal/audio_handler.py)
-- [Video Handler](./app/multimodal/video_handler.py)
-- [Voice WebSocket](./app/multimodal/voice_realtime.py)
-- [Requirements](./requirements.txt)
-- [Environment Template](./.env.example)
+Open a pull request with a clear description of the change and testing performed.
 
 ---
 
 # 📄 License
 
-This project is distributed under the license included in the repository.
-
-See [LICENSE](./LICENSE) for the full license text.
+See [`LICENSE`](LICENSE) for license information.
 
 ---
 
 <div align="center">
 
-### ⭐ Build AI systems that can retrieve, reason, calculate, and understand more than text.
+### Built with Python • LangGraph • FastAPI • OpenAI • Hybrid RAG
 
-<br>
-
-<a href="https://github.com/srideepgit/Multimodal-AI-Agent-and-Hybrid-RAG">
-<img src="https://img.shields.io/badge/⭐%20Star%20Repository-181717?style=for-the-badge&logo=github&logoColor=white" alt="Star repository" />
-</a>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&duration=3000&pause=1000&center=true&vCenter=true&width=700&lines=Multimodal+AI;Agentic+Reasoning;Hybrid+Retrieval;Grounded+Responses" alt="Footer animation" />
 
 <br><br>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=16&duration=3200&pause=1200&center=true&vCenter=true&width=760&lines=Multimodal+AI;Hybrid+RAG;Agentic+Routing;Grounded+Responses" alt="Footer animation" />
-
-<br><br>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4F46E5,50:7C3AED,100:06B6D4&height=130&section=footer&animation=fadeIn" width="100%" alt="Animated footer" />
+⭐ **If you find this project useful, consider giving it a star.**
 
 </div>
