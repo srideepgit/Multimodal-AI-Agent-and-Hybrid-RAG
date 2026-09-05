@@ -1,6 +1,6 @@
-# 🤖 Multimodal AI Agent & Hybrid RAG
-
 <div align="center">
+
+# 🤖 Multimodal AI Agent & Hybrid RAG
 
 ### Enterprise-Ready Multimodal AI • Agentic Routing • Hybrid Retrieval • Grounded Responses
 
