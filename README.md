@@ -109,7 +109,7 @@ Every non-text modality is normalized into textual context before entering the s
 
 - Natural-language-to-SQL workflow
 - SQLAlchemy database integration
-- Read-only query path
+- Read-only database path
 - Schema-aware prompting
 - Query validation
 - Structured database results
@@ -156,7 +156,7 @@ Every non-text modality is normalized into textual context before entering the s
                          │                                  │
                          │ Image → vision + OCR             │
                          │ Audio → transcription            │
-                         │ Video → frames + transcript     │
+                         │ Video → frames + transcript      │
                          │ Voice → STT / agent / TTS        │
                          └────────────────┬─────────────────┘
                                           │
@@ -331,13 +331,11 @@ The knowledge path combines lexical and semantic retrieval before reranking the 
 | **Cross-Encoder** | Re-ranks candidates based on query-document relevance |
 | **Qdrant** | Vector storage and similarity search |
 
-This architecture is useful because semantic search can recover conceptually similar content while BM25 remains strong for exact names, terms, IDs, and domain-specific keywords.
+This architecture combines semantic search with exact keyword matching, making the retrieval layer more robust across different query styles.
 
 ---
 
-# 📚 Document Indexing Pipeline
-
-Documents are processed before they enter the retrieval system.
+# 📚 Ingestion & Indexing
 
 ```text
 Documents
@@ -363,14 +361,14 @@ Qdrant Index
     └──────────────► BM25 Corpus
 ```
 
-The repository separates the ingestion and indexing concerns into dedicated modules, making the pipeline easier to modify as document sources change.
+The repository separates ingestion and indexing into dedicated modules, keeping document preparation independent from agent orchestration.
 
 ### Ingestion responsibilities
 
-- Load supported documents
-- Clean and normalize text
+- Load documents
+- Clean and normalize content
 - Attach metadata
-- Split documents into retrieval chunks
+- Split content into retrieval chunks
 - Prepare chunks for embedding
 
 ### Indexing responsibilities
@@ -384,7 +382,7 @@ The repository separates the ingestion and indexing concerns into dedicated modu
 
 # 🖼️ Multimodal Processing
 
-## Image
+## Image Understanding
 
 ```text
 Image Upload
@@ -402,7 +400,7 @@ Vision Model
           LangGraph Agent
 ```
 
-The image handler produces textual context from the image so the downstream planner and tools can operate on a consistent representation.
+The image handler converts visual information into textual context so the downstream planner and tools can operate on a consistent representation.
 
 ## 🎙️ Audio
 
@@ -485,7 +483,7 @@ Natural Language Question
        SQL Node
           │
           ▼
- Schema-aware SQL Generation
+Schema-aware SQL Generation
           │
           ▼
     Query Validation
@@ -500,24 +498,24 @@ Natural Language Question
     Response Engine
 ```
 
-The SQL configuration currently describes an `employees` table with fields including `id`, `name`, `department`, `salary`, and `hire_date`.
+The current configuration describes an `employees` table with fields including `id`, `name`, `department`, `salary`, and `hire_date`.
 
-### Recommended production controls
+### Production controls
 
-For production deployments, the SQL path should use:
+For production workloads, the SQL path should use:
 
 - Least-privilege database credentials
 - Read-only database permissions
 - Query timeouts
 - Result-size limits
-- Strong SQL allow/deny validation
-- Auditing and query logging
+- Strong SQL validation
+- Query auditing/logging
 
 ---
 
 # 🧮 Calculator
 
-Mathematical questions use a dedicated deterministic path rather than forcing the LLM to perform every calculation itself.
+Mathematical requests use a dedicated execution path rather than relying entirely on language-model arithmetic.
 
 ```text
 Question
@@ -538,13 +536,13 @@ Numeric Result
 Response
 ```
 
-This separation makes calculations easier to reason about and test independently of the language model.
+This separation makes numerical operations easier to reason about and test independently.
 
 ---
 
 # 🛡️ Grounded Responses & Validation
 
-The response layer is designed as a separate stage rather than mixing evidence gathering and answer formatting together.
+The response layer separates evidence gathering, generation, citations, confidence, and validation.
 
 ```text
 Retrieved / Tool Context
@@ -573,57 +571,56 @@ Retrieved / Tool Context
 - Use available evidence
 - Preserve source information
 - Expose a confidence signal
-- Validate the final response structure
+- Validate the response structure
 - Reduce unsupported answers in knowledge workflows
 
 ---
 
-# ⚡ Performance & Engineering Considerations
+# ⚡ Performance & Engineering
 
-The project is structured so expensive resources can be managed independently from request handling.
+The project separates expensive resources and shared services from request routing.
 
 ### Centralized configuration
 
-All environment-driven configuration is kept in `app/core/config.py`, including:
+Environment-driven settings are centralized in `app/core/config.py`, including:
 
-- LLM provider/model
-- Embedding model
-- Reranker model
+- LLM provider and model
+- Embedding and reranker models
 - Qdrant connection
 - Database connection
 - Chunk size and overlap
 - Retrieval top-k values
-- Multimodal models
-- Video processing limits
+- Vision/STT/TTS models
+- Video sampling limits
 - Upload size limits
 
-The settings accessor is cached with `lru_cache()` so configuration is parsed once per process.
+The settings accessor uses `lru_cache()` so configuration is parsed once per process.
 
 ### Dependency management
 
-The API uses a dedicated dependency layer for service construction, helping keep route handlers thin and making components easier to test or replace.
+The API uses a dedicated dependency layer for service construction. This keeps route handlers focused on HTTP concerns and makes components easier to replace and test.
 
 ### Retrieval efficiency
 
-Candidate retrieval and reranking are separated so the expensive cross-encoder stage can operate on a smaller candidate set instead of the entire document collection.
+The retrieval layer separates candidate retrieval from reranking, allowing the more expensive cross-encoder stage to process a smaller candidate pool rather than the entire corpus.
 
 ---
 
 # 🔐 Security
 
-The application includes explicit safety boundaries that should be retained in production deployments.
+The architecture includes several safety boundaries that should be retained and strengthened for production use.
 
-## SQL
+### SQL
 
 Use read-only credentials and validate generated queries before execution.
 
-## Calculator
+### Calculator
 
-Keep calculation logic isolated from arbitrary Python execution. Do not expose `eval()` or `exec()` to user-controlled input.
+Keep calculation logic isolated from arbitrary Python execution. Never expose `eval()` or `exec()` to user-controlled input.
 
-## File Uploads
+### File Uploads
 
-The application supports a configurable upload-size limit through:
+The application has a configurable upload-size limit:
 
 ```env
 MAX_UPLOAD_SIZE_MB=25
@@ -631,11 +628,11 @@ MAX_UPLOAD_SIZE_MB=25
 
 Video processing additionally requires FFmpeg.
 
-## Secrets
+### Secrets
 
-API keys must be stored in environment variables or a proper secret manager.
+Store API keys in environment variables or a proper secret manager.
 
-> Never commit `.env` or real API keys to the repository.
+> Never commit `.env` or real API keys to GitHub.
 
 ---
 
@@ -648,7 +645,7 @@ API keys must be stored in environment variables or a proper secret manager.
 | `POST` | `/chat/image` | Image understanding + question |
 | `POST` | `/chat/audio` | Audio transcription + question |
 | `POST` | `/chat/video` | Video frame + audio analysis |
-| `WS` | `/ws/voice` | Push-to-talk voice interaction |
+| `WS` | `/ws/voice` | Push-to-talk voice |
 
 ## Text Chat
 
@@ -721,7 +718,7 @@ OPENAI_MODEL=gpt-4o-mini
 
 # Embeddings / Reranker
 EMBEDDING_MODEL=BAAI/bge-m3
-RERANKER_MODEL=BAI/bge-reranker-base
+RERANKER_MODEL=BAAI/bge-reranker-base
 
 # Qdrant
 QDRANT_URL=http://localhost:6333
@@ -748,8 +745,6 @@ VIDEO_MAX_FRAMES=6
 FFMPEG_PATH=ffmpeg
 MAX_UPLOAD_SIZE_MB=25
 ```
-
-> **Important:** The reranker model value should match your actual `.env.example` configuration. If you copy this block, verify the model identifier before running the application.
 
 ---
 
@@ -798,15 +793,15 @@ macOS / Linux:
 cp .env.example .env
 ```
 
-Add your real `OPENAI_API_KEY` and verify the database/Qdrant configuration.
+Add your real `OPENAI_API_KEY` and verify the database and Qdrant configuration.
 
 ## 5. Start Qdrant
 
-Run Qdrant using your preferred local or hosted setup and ensure `QDRANT_URL` points to it.
+Run Qdrant using your preferred local or hosted setup and make sure `QDRANT_URL` points to it.
 
-## 6. Prepare documents
+## 6. Prepare the knowledge base
 
-Use the repository's indexing scripts to ingest the documents you want available to the knowledge path.
+Run the repository's document indexing workflow to ingest the documents you want available to the knowledge path.
 
 ## 7. Run FastAPI
 
@@ -865,9 +860,7 @@ frontend/
 └── script.js
 ```
 
-The application can serve the frontend through FastAPI when the frontend directory is available.
-
-The UI is designed around:
+The UI supports:
 
 - Text chat
 - New conversations
@@ -876,6 +869,8 @@ The UI is designed around:
 - API configuration
 - Suggested prompts
 - Voice interaction
+
+FastAPI serves the frontend when the frontend directory is available.
 
 ---
 
@@ -904,7 +899,7 @@ Multimodal-AI-Agent-and-Hybrid-RAG/
 │   │   └── openai_client.py
 │   │
 │   ├── multimodal/
-│   │   ├── image_handler.py      # Vision + OCR-style extraction
+│   │   ├── image_handler.py      # Vision + text extraction
 │   │   ├── audio_handler.py      # STT + TTS
 │   │   ├── video_handler.py      # FFmpeg + frame/audio processing
 │   │   └── voice_realtime.py     # Push-to-talk WebSocket
@@ -935,8 +930,6 @@ Multimodal-AI-Agent-and-Hybrid-RAG/
 │   └── script.js
 │
 ├── scripts/
-│   └── indexing / utility scripts
-│
 ├── tests/
 ├── .env.example
 ├── requirements.txt
@@ -948,13 +941,13 @@ Multimodal-AI-Agent-and-Hybrid-RAG/
 
 # 🧪 Testing
 
-If the test suite is present and configured, run:
+Run the test suite with:
 
 ```bash
 pytest
 ```
 
-For a focused test:
+For a focused test module:
 
 ```bash
 pytest tests/agent
@@ -966,7 +959,7 @@ For coverage:
 pytest --cov=app
 ```
 
-Testing priorities include:
+Recommended test areas include:
 
 - Planner routing
 - Retrieval behaviour
@@ -980,29 +973,29 @@ Testing priorities include:
 
 # 🧩 Design Decisions
 
-## Why LangGraph?
+## LangGraph
 
-LangGraph provides an explicit execution graph where routing and node responsibilities are visible instead of hidden inside one large agent prompt.
+Used for explicit workflow orchestration, state management, and conditional routing between reasoning paths.
 
-## Why Hybrid Retrieval?
+## Hybrid Retrieval
 
-BM25 handles exact lexical matches while dense retrieval handles semantic similarity. Combining both improves coverage across different query styles.
+Combines BM25 lexical matching with dense vector retrieval so the system can handle both exact terminology and semantic queries.
 
-## Why Cross-Encoder Reranking?
+## Cross-Encoder Reranking
 
-Initial retrieval is optimized for candidate recall. The reranker can then spend more computation on a smaller candidate set to improve relevance ordering.
+Reranking is performed after candidate retrieval, allowing a more expensive relevance model to focus on a smaller candidate set.
 
-## Why a Separate Multimodal Layer?
+## Modular Multimodal Layer
 
-The multimodal handlers normalize different input formats before the core graph. This prevents image/audio/video-specific logic from leaking into every agent node.
+Image, audio, video, and voice processing are isolated from the core agent so new modalities can be added without redesigning the LangGraph workflow.
 
-## Why Dependency Injection?
+## Centralized Configuration
 
-Centralized dependencies make services easier to replace, configure, mock, and test.
+Model, retrieval, database, Qdrant, and multimodal settings are centralized instead of being scattered across route handlers and services.
 
-## Why a Dedicated Response Layer?
+## Dedicated Response Layer
 
-Separating context construction, generation, citations, confidence, and validation makes response quality concerns independently testable.
+Context construction, generation, citations, confidence, and validation are kept separate so response quality can be improved independently.
 
 ---
 
@@ -1030,7 +1023,7 @@ Separating context construction, generation, citations, confidence, and validati
               Citations    Confidence     Validation
 ```
 
-### Core engineering principles
+### Core principles
 
 - **Separation of concerns** — each subsystem has a focused responsibility.
 - **Replaceability** — LLM, embedding, reranker, vector store, and database layers are configuration-driven.
@@ -1038,6 +1031,79 @@ Separating context construction, generation, citations, confidence, and validati
 - **Explicit routing** — the planner determines the execution path.
 - **Validation** — responses pass through a dedicated validation stage.
 - **Operational boundaries** — multimodal uploads, SQL execution, and external model calls have separate control points.
+
+---
+
+# 📊 Capability Matrix
+
+| Capability | Status |
+|---|:---:|
+| FastAPI backend | ✅ |
+| LangGraph workflow | ✅ |
+| Planner-based routing | ✅ |
+| Hybrid RAG | ✅ |
+| BM25 retrieval | ✅ |
+| Dense vector retrieval | ✅ |
+| Cross-encoder reranking | ✅ |
+| Qdrant integration | ✅ |
+| SQL reasoning | ✅ |
+| Calculator path | ✅ |
+| Image processing | ✅ |
+| Audio processing | ✅ |
+| Video processing | ✅ |
+| Push-to-talk voice | ✅ |
+| Citations | ✅ |
+| Confidence scoring | ✅ |
+| Response validation | ✅ |
+| Browser frontend | ✅ |
+| Continuous realtime voice | 🔜 |
+| Advanced multi-agent orchestration | 🔜 |
+
+---
+
+# 🛠️ Technology Stack
+
+| Layer | Technology |
+|---|---|
+| **Language** | Python 3.12+ |
+| **API** | FastAPI |
+| **Agent Orchestration** | LangGraph |
+| **LLM** | OpenAI API |
+| **Embeddings** | BAAI/bge-m3 |
+| **Vector Database** | Qdrant |
+| **Lexical Retrieval** | BM25 |
+| **Reranking** | BAAI/bge-reranker-base |
+| **Database / ORM** | SQLAlchemy |
+| **Validation / Settings** | Pydantic / Pydantic Settings |
+| **Speech-to-Text** | Whisper |
+| **Text-to-Speech** | OpenAI TTS |
+| **Video Processing** | FFmpeg |
+| **Testing** | Pytest |
+| **Frontend** | HTML / CSS / JavaScript |
+
+---
+
+# 📌 Example Use Cases
+
+### 🏢 Enterprise Knowledge Assistant
+
+Ask questions over indexed internal documentation and business knowledge.
+
+### 📄 Document & Image Analysis
+
+Upload an image and ask questions about visible information.
+
+### 🎙️ Voice Assistant
+
+Use push-to-talk voice input and receive synthesized responses.
+
+### 🗄️ Business Data Assistant
+
+Ask natural-language questions over structured SQL data.
+
+### 📊 Analytical Assistant
+
+Combine retrieved business context with deterministic calculations.
 
 ---
 
@@ -1067,120 +1133,22 @@ These are roadmap items rather than claims about the current implementation.
 
 ---
 
-# 🏁 Current Capability Summary
-
-| Area | Status |
-|---|:---:|
-| FastAPI backend | ✅ |
-| LangGraph workflow | ✅ |
-| Planner-based routing | ✅ |
-| Hybrid RAG | ✅ |
-| BM25 retrieval | ✅ |
-| Dense vector retrieval | ✅ |
-| Cross-encoder reranking | ✅ |
-| Qdrant integration | ✅ |
-| SQL reasoning | ✅ |
-| Calculator path | ✅ |
-| Image processing | ✅ |
-| Audio processing | ✅ |
-| Video processing | ✅ |
-| Push-to-talk voice | ✅ |
-| Citations | ✅ |
-| Confidence scoring | ✅ |
-| Response validation | ✅ |
-| Browser frontend | ✅ |
-| Continuous realtime voice | 🔜 |
-| Multi-agent orchestration | 🔜 |
-
----
-
-# 🛠️ Technology Stack
-
-| Layer | Technology |
-|---|---|
-| **Language** | Python 3.12+ |
-| **API** | FastAPI |
-| **Agent Orchestration** | LangGraph |
-| **LLM** | OpenAI API |
-| **Embeddings** | BAAI/bge-m3 |
-| **Vector Database** | Qdrant |
-| **Lexical Retrieval** | BM25 |
-| **Reranking** | BAAI/bge-reranker-base |
-| **Database / ORM** | SQLAlchemy |
-| **Validation / Settings** | Pydantic / Pydantic Settings |
-| **Speech-to-Text** | Whisper |
-| **Text-to-Speech** | OpenAI TTS |
-| **Video Processing** | FFmpeg |
-| **Testing** | Pytest |
-| **Frontend** | HTML / CSS / JavaScript |
-
----
-
-# 📊 Configuration Reference
-
-| Variable | Purpose | Example |
-|---|---|---|
-| `OPENAI_API_KEY` | OpenAI authentication | `your-key` |
-| `OPENAI_MODEL` | Main generation model | `gpt-4o-mini` |
-| `EMBEDDING_MODEL` | Embedding model | `BAAI/bge-m3` |
-| `RERANKER_MODEL` | Reranking model | `BAAI/bge-reranker-base` |
-| `QDRANT_URL` | Qdrant endpoint | `http://localhost:6333` |
-| `QDRANT_COLLECTION` | Vector collection | `enterprise_knowledge` |
-| `DATABASE_URL` | SQLAlchemy DB URL | `sqlite:///./enterprise.db` |
-| `CHUNK_SIZE` | Document chunk size | `500` |
-| `CHUNK_OVERLAP` | Chunk overlap | `100` |
-| `RETRIEVAL_TOP_K` | Final retrieval count | `5` |
-| `RETRIEVAL_CANDIDATE_K` | Candidate pool size | `20` |
-| `VISION_MODEL` | Image understanding model | `gpt-4o-mini` |
-| `STT_MODEL` | Speech-to-text model | `whisper-1` |
-| `TTS_MODEL` | Text-to-speech model | `tts-1` |
-| `VIDEO_MAX_FRAMES` | Maximum sampled frames | `6` |
-| `MAX_UPLOAD_SIZE_MB` | Upload limit | `25` |
-
----
-
-# 📌 Example Use Cases
-
-### 🏢 Enterprise Knowledge Assistant
-
-Ask questions over internal policies, documentation, manuals, reports, and other indexed knowledge.
-
-### 📄 Document / Image Analysis
-
-Upload an image and ask questions about visible information.
-
-### 🎙️ Voice Assistant
-
-Use push-to-talk voice input and receive synthesized responses.
-
-### 🗄️ Business Data Assistant
-
-Ask natural-language questions over structured SQL data.
-
-### 📊 Analytical Assistant
-
-Combine retrieved business knowledge with deterministic calculations.
-
----
-
 # ⚠️ Production Considerations
 
-This repository demonstrates a production-oriented architecture, but additional controls should be added before exposing it to sensitive production workloads.
-
-Recommended additions include:
+Before exposing the system to sensitive production workloads, consider adding:
 
 - Authentication and authorization
-- Role-based access to documents and database resources
-- Secret management through a cloud secret manager
+- Role-based document access
+- Secret management
 - Rate limiting
-- Request tracing
 - Structured logging
-- Model and retrieval evaluation
+- Request tracing
+- Retrieval and answer evaluation
 - Prompt-injection defenses
-- Stronger SQL allowlisting
 - File-type validation and malware scanning
-- Resource quotas and concurrency limits
+- Resource and concurrency limits
 - Persistent conversation storage
+- Stronger SQL controls
 
 ---
 
